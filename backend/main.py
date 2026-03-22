@@ -12,13 +12,22 @@ from .routes import museums, sensors, public
 
 async def _auto_seed_if_empty():
     """Auto-seed demo data if database is empty (handles Render free tier /tmp wipes)."""
-    db = await get_db()
-    row = await db.execute("SELECT COUNT(*) as c FROM museums")
-    count = (await row.fetchone())["c"]
-    await db.close()
-    if count == 0:
-        from .demo_seed import seed
-        await seed()
+    try:
+        db = await get_db()
+        row = await db.execute("SELECT COUNT(*) as c FROM museums")
+        count = (await row.fetchone())["c"]
+        await db.close()
+        if count == 0:
+            print("[ConservaTwin] Database is empty, seeding demo data...")
+            from .demo_seed import seed
+            await seed()
+            print("[ConservaTwin] Demo data seeded successfully!")
+        else:
+            print(f"[ConservaTwin] Database has {count} museum(s), skipping seed.")
+    except Exception as e:
+        print(f"[ConservaTwin] Auto-seed error: {e}")
+        import traceback
+        traceback.print_exc()
 
 
 @asynccontextmanager
@@ -70,3 +79,11 @@ async def root():
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.post("/seed")
+async def manual_seed():
+    """Manual seed endpoint — use if auto-seed fails."""
+    from .demo_seed import seed
+    await seed()
+    return {"status": "seeded"}
