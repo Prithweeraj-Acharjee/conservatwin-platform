@@ -6,13 +6,25 @@ Open-source digital twin for cultural heritage preservation.
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .database import init_db
+from .database import init_db, get_db
 from .routes import museums, sensors, public
+
+
+async def _auto_seed_if_empty():
+    """Auto-seed demo data if database is empty (handles Render free tier /tmp wipes)."""
+    db = await get_db()
+    row = await db.execute("SELECT COUNT(*) as c FROM museums")
+    count = (await row.fetchone())["c"]
+    await db.close()
+    if count == 0:
+        from .demo_seed import seed
+        await seed()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await init_db()
+    await _auto_seed_if_empty()
     yield
 
 

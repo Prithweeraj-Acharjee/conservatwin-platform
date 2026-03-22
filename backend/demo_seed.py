@@ -9,7 +9,7 @@ Usage: python -m backend.demo_seed
 import asyncio
 import math
 import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from .database import init_db, get_db
 
 
@@ -29,8 +29,8 @@ async def seed():
 
     # Create zones with different material types
     zones = [
-        ("Gallery A — Impressionist Collection", "European oil paintings, 19th century", 19, 22, 45, 55, "oil_painting"),
-        ("Gallery B — Asian Textiles", "Silk and cotton textiles, 15th-18th century", 18, 21, 45, 55, "textile"),
+        ("Gallery A - Impressionist Collection", "European oil paintings, 19th century", 19, 22, 45, 55, "oil_painting"),
+        ("Gallery B - Asian Textiles", "Silk and cotton textiles, 15th-18th century", 18, 21, 45, 55, "textile"),
         ("Paper Conservation Vault", "Rare manuscripts and photographs", 16, 18, 40, 50, "paper"),
         ("Sculpture Hall", "Stone and ceramic works", 18, 24, 35, 55, "stone"),
     ]
