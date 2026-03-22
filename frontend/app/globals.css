@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@200;300;400;600&display=swap');
+
+:root {
+  --brass: #c4a35a;
+  --surface-0: #0a0908;
+  --surface-1: #12110f;
+  --surface-2: #1a1816;
+  --surface-3: #221f1c;
+}
+
+body {
+  background: var(--surface-0);
+  color: #e8e0d4;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface-1); }
+::-webkit-scrollbar-thumb { background: #3a3530; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--brass); }
