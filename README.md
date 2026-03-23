@@ -163,11 +163,29 @@ hardware/
 3. It auto-detects the `render.yaml` config
 4. Deploy (free tier)
 
-**Frontend → Vercel** (coming soon)
+**Frontend → Vercel**
+1. Import repo on Vercel
+2. Set Root Directory to `frontend`
+3. Add env var: `NEXT_PUBLIC_API_URL` = your Render URL
+4. Deploy
+
+## Live Demo
+
+- **Landing page:** https://conservatwin-platform.vercel.app
+- **Museum dashboard:** https://conservatwin-platform.vercel.app/museum/toledo-museum
+- **API docs (Swagger):** https://conservatwin-platform.onrender.com/docs
+
+> Note: Backend runs on Render free tier — first load may take ~30 seconds while the server wakes up.
 
 ## Roadmap
 
-- [ ] Next.js frontend dashboard
+- [x] Multi-tenant museum/zone management
+- [x] Preservation Risk Index with 10 material profiles
+- [x] AI conservation advisor
+- [x] Anomaly detection engine
+- [x] IoT sensor ingestion API
+- [x] Next.js frontend dashboard
+- [x] Public heritage health profiles
 - [ ] Real-time WebSocket updates
 - [ ] Photo-based degradation detection (computer vision)
 - [ ] Predictive risk modeling (ML)
@@ -183,7 +201,10 @@ ConservaTwin makes conservation technology accessible to every museum, temple, c
 
 ## Author
 
-Built by **Prithweeraj Acharjee** — artist, engineer, and CSE student at the University of Toledo.
+Built by [**Prithweeraj Acharjee**](https://prithwee.vercel.app) — artist, engineer, and CSE student at the University of Toledo.
+
+- Website: https://prithwee.vercel.app
+- GitHub: [@Prithweeraj-Acharjee](https://github.com/Prithweeraj-Acharjee)
 
 Conservation is engineering. Heritage is data. Preservation is open-source.
 

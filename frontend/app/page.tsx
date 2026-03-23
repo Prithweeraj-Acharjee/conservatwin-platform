@@ -150,30 +150,28 @@ export default function LandingPage() {
         <p className="text-brass font-mono text-sm mb-3 tracking-widest uppercase">Live Museums</p>
         <h2 className="font-display text-3xl mb-8">Heritage health profiles</h2>
 
-        {museums.length > 0 ? (
-          <div className="grid gap-4">
-            {museums.map((m: any) => (
-              <Link
-                key={m.slug}
-                href={`/museum/${m.slug}`}
-                className="bg-surface-2 border border-neutral-800 rounded-lg p-6 hover:border-brass/40 transition-all group"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg font-medium group-hover:text-brass transition-colors">{m.name}</h3>
-                    <p className="text-sm text-neutral-500 mt-1">{m.location}</p>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm text-neutral-400">{m.zone_count} zones</div>
-                    <div className="text-xs text-neutral-600 mt-1">{m.total_readings?.toLocaleString()} readings</div>
-                  </div>
+        <div className="grid gap-4">
+          {(museums.length > 0 ? museums : [
+            { name: 'Toledo Museum of Art', slug: 'toledo-museum', location: 'Toledo, Ohio, USA', zone_count: 4, total_readings: 576 }
+          ]).map((m: any) => (
+            <Link
+              key={m.slug}
+              href={`/museum/${m.slug}`}
+              className="bg-surface-2 border border-neutral-800 rounded-lg p-6 hover:border-brass/40 transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-medium group-hover:text-brass transition-colors">{m.name}</h3>
+                  <p className="text-sm text-neutral-500 mt-1">{m.location}</p>
                 </div>
-              </Link>
-            ))}
-          </div>
-        ) : (
-          <p className="text-neutral-500">Connect to API to see live museums.</p>
-        )}
+                <div className="text-right">
+                  <div className="text-sm text-neutral-400">{m.zone_count} zones monitored</div>
+                  <div className="text-xs text-neutral-600 mt-1">Live dashboard &rarr;</div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
       </section>
 
       {/* CTA */}
