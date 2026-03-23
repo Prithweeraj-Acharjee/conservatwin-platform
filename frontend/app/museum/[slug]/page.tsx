@@ -13,18 +13,51 @@ export default function MuseumPage() {
   const slug = params.slug as string
   const [data, setData] = useState<MuseumDashboard | null>(null)
   const [error, setError] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [retryCount, setRetryCount] = useState(0)
   const [view, setView] = useState<'overview' | 'trends'>('overview')
 
   useEffect(() => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://conservatwin-platform.onrender.com'
-    fetch(`${apiUrl}/api/public/${slug}`)
-      .then(r => {
+
+    async function fetchData(attempt: number) {
+      try {
+        const r = await fetch(`${apiUrl}/api/public/${slug}`, { signal: AbortSignal.timeout(45000) })
         if (!r.ok) throw new Error('Museum not found')
-        return r.json()
-      })
-      .then(setData)
-      .catch(e => setError(e.message))
+        const json = await r.json()
+        setData(json)
+        setLoading(false)
+      } catch (e: any) {
+        if (attempt < 3) {
+          setRetryCount(attempt + 1)
+          setTimeout(() => fetchData(attempt + 1), 3000)
+        } else {
+          setError(e.message || 'Failed to connect to server')
+          setLoading(false)
+        }
+      }
+    }
+
+    fetchData(0)
   }, [slug])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-2 h-2 rounded-full bg-brass animate-pulse-glow" />
+            <span className="text-neutral-500 font-mono text-sm">Loading heritage data...</span>
+          </div>
+          {retryCount > 0 && (
+            <p className="text-xs text-neutral-600 font-mono">
+              Server is waking up... attempt {retryCount}/3 (free tier cold start ~30s)
+            </p>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   if (error) {
     return (
