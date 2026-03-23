@@ -18,31 +18,22 @@ export default function MuseumPage() {
   const [view, setView] = useState<'overview' | 'trends'>('overview')
 
   useEffect(() => {
+    const API = 'https://conservatwin-platform.onrender.com'
+
     async function fetchData(attempt: number) {
       try {
-        const r = await fetch(`/api/public/${slug}`)
-        if (r.status === 503) {
-          // Backend waking up — keep retrying
-          if (attempt < 8) {
-            setRetryCount(attempt + 1)
-            setTimeout(() => fetchData(attempt + 1), 5000)
-            return
-          }
-          throw new Error('Server is taking too long to start. Try again in a minute.')
-        }
-        if (!r.ok) {
-          const err = await r.json().catch(() => ({}))
-          throw new Error(err.error || 'Museum not found')
-        }
+        const r = await fetch(`${API}/api/public/${slug}`)
+        if (!r.ok) throw new Error('Museum not found')
         const json = await r.json()
         setData(json)
         setLoading(false)
       } catch (e: any) {
-        if (e.message === 'Failed to fetch' && attempt < 8) {
+        // Render free tier takes ~30s to wake up — keep retrying
+        if (attempt < 10) {
           setRetryCount(attempt + 1)
-          setTimeout(() => fetchData(attempt + 1), 5000)
+          setTimeout(() => fetchData(attempt + 1), 4000)
         } else {
-          setError(e.message || 'Failed to connect to server')
+          setError('Server unavailable. Please try again in a minute.')
           setLoading(false)
         }
       }
