@@ -22,13 +22,16 @@ export default function MuseumPage() {
 
     async function fetchData(attempt: number) {
       try {
-        const r = await fetch(`${apiUrl}/api/public/${slug}`, { signal: AbortSignal.timeout(45000) })
-        if (!r.ok) throw new Error('Museum not found')
+        const r = await fetch(`/api/public/${slug}`)
+        if (!r.ok) {
+          const err = await r.json().catch(() => ({}))
+          throw new Error(err.error || 'Museum not found')
+        }
         const json = await r.json()
         setData(json)
         setLoading(false)
       } catch (e: any) {
-        if (attempt < 3) {
+        if (attempt < 2) {
           setRetryCount(attempt + 1)
           setTimeout(() => fetchData(attempt + 1), 3000)
         } else {

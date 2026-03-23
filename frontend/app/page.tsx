@@ -7,16 +7,10 @@ export default function LandingPage() {
   const [museums, setMuseums] = useState<any[]>([])
 
   useEffect(() => {
-    async function load(attempt: number) {
-      try {
-        const r = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://conservatwin-platform.onrender.com'}/api/museums`, { signal: AbortSignal.timeout(45000) })
-        const d = await r.json()
-        setMuseums(d.museums || [])
-      } catch {
-        if (attempt < 3) setTimeout(() => load(attempt + 1), 3000)
-      }
-    }
-    load(0)
+    fetch('/api/museums')
+      .then(r => r.json())
+      .then(d => setMuseums(d.museums || []))
+      .catch(() => {})
   }, [])
 
   return (
