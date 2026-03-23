@@ -7,7 +7,7 @@ export default function LandingPage() {
   const [museums, setMuseums] = useState<any[]>([])
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/museums`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || 'https://conservatwin-platform.onrender.com'}/api/museums`)
       .then(r => r.json())
       .then(d => setMuseums(d.museums || []))
       .catch(() => {})

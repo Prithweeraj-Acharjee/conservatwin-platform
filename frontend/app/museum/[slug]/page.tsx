@@ -16,7 +16,7 @@ export default function MuseumPage() {
   const [view, setView] = useState<'overview' | 'trends'>('overview')
 
   useEffect(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://conservatwin-platform.onrender.com'
     fetch(`${apiUrl}/api/public/${slug}`)
       .then(r => {
         if (!r.ok) throw new Error('Museum not found')
