@@ -18,11 +18,17 @@ export default function MuseumPage() {
   const [view, setView] = useState<'overview' | 'trends'>('overview')
 
   useEffect(() => {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://conservatwin-platform.onrender.com'
-
     async function fetchData(attempt: number) {
       try {
         const r = await fetch(`/api/public/${slug}`)
+        if (r.status === 503) {
+          // Backend waking up
+          if (attempt < 3) {
+            setRetryCount(attempt + 1)
+            setTimeout(() => fetchData(attempt + 1), 5000)
+            return
+          }
+        }
         if (!r.ok) {
           const err = await r.json().catch(() => ({}))
           throw new Error(err.error || 'Museum not found')
@@ -31,9 +37,9 @@ export default function MuseumPage() {
         setData(json)
         setLoading(false)
       } catch (e: any) {
-        if (attempt < 2) {
+        if (attempt < 3) {
           setRetryCount(attempt + 1)
-          setTimeout(() => fetchData(attempt + 1), 3000)
+          setTimeout(() => fetchData(attempt + 1), 5000)
         } else {
           setError(e.message || 'Failed to connect to server')
           setLoading(false)
