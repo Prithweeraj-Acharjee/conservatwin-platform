@@ -22,12 +22,13 @@ export default function MuseumPage() {
       try {
         const r = await fetch(`/api/public/${slug}`)
         if (r.status === 503) {
-          // Backend waking up
-          if (attempt < 3) {
+          // Backend waking up — keep retrying
+          if (attempt < 8) {
             setRetryCount(attempt + 1)
             setTimeout(() => fetchData(attempt + 1), 5000)
             return
           }
+          throw new Error('Server is taking too long to start. Try again in a minute.')
         }
         if (!r.ok) {
           const err = await r.json().catch(() => ({}))
@@ -37,7 +38,7 @@ export default function MuseumPage() {
         setData(json)
         setLoading(false)
       } catch (e: any) {
-        if (attempt < 3) {
+        if (e.message === 'Failed to fetch' && attempt < 8) {
           setRetryCount(attempt + 1)
           setTimeout(() => fetchData(attempt + 1), 5000)
         } else {
