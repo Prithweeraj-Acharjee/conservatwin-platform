@@ -18,6 +18,7 @@ class SensorReading(BaseModel):
     zone_id: int
     temperature: float
     humidity: float
+    timestamp: str | None = None
 
 
 class BatchReading(BaseModel):
@@ -42,10 +43,16 @@ async def ingest_reading(data: SensorReading, x_api_key: str = Header(...)):
     zone = dict(zone)
 
     # Store reading
-    await db.execute(
-        "INSERT INTO readings (zone_id, temperature, humidity) VALUES (?, ?, ?)",
-        (data.zone_id, data.temperature, data.humidity),
-    )
+    if data.timestamp:
+        await db.execute(
+            "INSERT INTO readings (zone_id, temperature, humidity, timestamp) VALUES (?, ?, ?, ?)",
+            (data.zone_id, data.temperature, data.humidity, data.timestamp),
+        )
+    else:
+        await db.execute(
+            "INSERT INTO readings (zone_id, temperature, humidity) VALUES (?, ?, ?)",
+            (data.zone_id, data.temperature, data.humidity),
+        )
 
     # Get recent readings for analysis
     rows = await db.execute(

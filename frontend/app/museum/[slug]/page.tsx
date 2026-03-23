@@ -64,8 +64,9 @@ export default function MuseumPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-display text-neutral-400 mb-2">Museum Not Found</h1>
+          <h1 className="text-2xl font-display text-neutral-400 mb-2">Could Not Load Museum</h1>
           <p className="text-neutral-600 mb-4">{error}</p>
+          <button onClick={() => window.location.reload()} className="text-brass hover:underline text-sm mr-4">Try Again</button>
           <Link href="/" className="text-brass hover:underline text-sm">Back to Home</Link>
         </div>
       </div>
