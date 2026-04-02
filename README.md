@@ -29,3 +29,31 @@
 - **Anomaly Detection** - real-time alerts when conditions deviate from safe ranges
 - **Material-Aware Risk Profiling** - different risk thresholds for oil paintings, textiles, metals, etc.
 
+---
+
+## Architecture
+
+```
+IoT Sensors (ESP32 + DHT22)
+        |
+        v
+  FastAPI Backend
+   |          |
+   v          v
+PRI Engine   AI Advisor
+        |
+        v
+  Next.js Frontend
+   |          |
+   v          v
+Dashboard   Alerts
+```
+
+---
+
+## Tech Stack
+
+<div align="center">
+
+| Category | Technology |
+|---
